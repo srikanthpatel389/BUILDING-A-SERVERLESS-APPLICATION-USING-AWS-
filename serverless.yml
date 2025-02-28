@@ -1,1 +1,46 @@
+service: serverless-app
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1
+  environment:
+    TABLE_NAME: ItemsTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:us-east-1:*:table/ItemsTable
+
+functions:
+  getItems:
+    handler: src/handler.get_items
+    events:
+      - http:
+          path: items
+          method: get
+
+  createItem:
+    handler: src/handler.create_item
+    events:
+      - http:
+          path: items
+          method: post
+
+  getItem:
+    handler: src/handler.get_item
+    events:
+      - http:
+          path: items/{id}
+          method: get
+
+  deleteItem:
+    handler: src/handler.delete_item
+    events:
+      - http:
+          path: items/{id}
+          method: delete
 
