@@ -1,0 +1,7 @@
+import json
+from src.handler import response
+
+def test_response():
+    result = response(200, {"message": "Success"})
+    assert result["statusCode"] == 200
+    assert json.loads(result["body"]) == {"message": "Success"}
